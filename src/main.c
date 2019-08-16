@@ -1,4 +1,4 @@
-#include "peripherals/aux.h"
+#include "peripherals/auxiliaries.h"
 
 void main(void)
 {

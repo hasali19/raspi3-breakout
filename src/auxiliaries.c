@@ -1,5 +1,5 @@
 #include "peripherals/base.h"
-#include "peripherals/aux.h"
+#include "peripherals/auxiliaries.h"
 #include "peripherals/gpio.h"
 
 #include <stdint.h>
