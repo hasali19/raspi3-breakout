@@ -34,10 +34,14 @@ el1_entry:
     adr     x0, __bss_begin__
     adr     x1, __bss_end__
     cmp     x0, x1
-    b.cs    setup_stack
+    b.cs    2f
 1:  str     xzr, [x0], #8
     cmp     x1, x0
     b.hi    1b
+2:
+    // Set exception vector table
+    adr     x0, vector_table
+    msr     vbar_el1, x0
 
 setup_stack:
     // Set the stack pointer
