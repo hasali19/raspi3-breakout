@@ -53,6 +53,9 @@ _main:
     bl      mmu_create_tables
     bl      mmu_init
 
+    // Initialise mini uart
+    bl      mini_uart_init
+
     // Jump to c code
     bl      main
     b       halt

@@ -1,6 +1,7 @@
 TC_PREFIX = aarch64-elf
 
-CFLAGS = -Wall -O2 -nostdlib -nostartfiles -ffreestanding -Iinclude
+CFLAGS = -Wall -O2 -nostdlib -nostartfiles -ffreestanding \
+		 -mcpu=cortex-a53+nofp -Iinclude -DPRINTF_DISABLE_SUPPORT_FLOAT
 
 CC  = $(TC_PREFIX)-gcc $(CFLAGS)
 ASM = $(TC_PREFIX)-gcc
