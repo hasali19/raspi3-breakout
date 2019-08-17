@@ -49,6 +49,10 @@ setup_stack:
     mov     sp, x0
 
 _main:
+    // Initialise mmu
+    bl      mmu_create_tables
+    bl      mmu_init
+
     // Jump to c code
     bl      main
     b       halt
