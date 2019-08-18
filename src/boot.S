@@ -31,8 +31,8 @@ _start:
 
 el1_entry:
     // Clear the bss section
-    adr     x0, __bss_begin__
-    adr     x1, __bss_end__
+    ldr     x0, =__bss_begin__
+    ldr     x1, =__bss_end__
     cmp     x0, x1
     b.cs    2f
 1:  str     xzr, [x0], #8
