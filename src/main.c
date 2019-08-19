@@ -1,7 +1,7 @@
 #include "framebuffer.h"
 #include "io.h"
 #include "props.h"
-#include "utils.h"
+#include "peripherals/timer.h"
 
 void set_arm_max_clock_rate(void)
 {
@@ -16,7 +16,7 @@ void main(void)
     printf("Serial number: 0x%016x\n", get_board_serial());
     printf("ARM clock rate: %d MHz\n", get_clock_rate(0x000000003) / 1000000);
 
-    uint64_t start = get_sys_counter_ms();
+    uint64_t start = timer_get_ticks();
 
     if (framebuffer_init(800, 600))
     {
@@ -26,9 +26,9 @@ void main(void)
         }
     }
 
-    uint64_t end = get_sys_counter_ms();
+    uint64_t end = timer_get_ticks();
 
-    printf("256 frames rendered in %d ms\n", end - start);
+    printf("256 frames rendered in %d ms\n", (end - start) / 1000);
 
     while (1)
     {
