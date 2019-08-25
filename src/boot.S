@@ -5,7 +5,7 @@
 .set SCTLR_EL1_VAL, (3 << 28) | (3 << 22) | (1 << 20) | (1 << 11) |  /* Reserved */ \
                     (0 << 25) |     /* EE: Use little endian data accesses at el1 */ \
                     (0 << 24) |     /* E0E: Use little endian data accesses at el0 */ \
-                    (0 << 12) |     /* I: Disable instruction cache */ \
+                    (1 << 12) |     /* I: Enable instruction cache */ \
                     (0 << 2)  |     /* C: Disable data cache */ \
                     (0 << 0)        /* M: Disable MMU */
 
