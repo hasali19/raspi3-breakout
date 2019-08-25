@@ -18,11 +18,14 @@ void main(void)
 
     uint64_t start = timer_get_ticks();
 
-    if (framebuffer_init(800, 600))
+    if (fb_init(800, 600))
     {
         for (uint32_t i = 0; i < 256; i++)
         {
-            framebuffer_clear(RGB(i, i, 0));
+            fb_clear(RGB(i, 0, i));
+
+            fb_draw_rect(100 + i, 100, 100, 100, RGB(255, 255, 255));
+            fb_fill_rect(100 + i, 400, 100, 100, RGB(255, 255, 255));
         }
     }
 

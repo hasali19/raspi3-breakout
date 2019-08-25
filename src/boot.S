@@ -14,18 +14,22 @@
 
 .global _start
 _start:
-    mov x0, HCR_EL2_VAL
-    msr hcr_el2, x0
+    mov     x0, HCR_EL2_VAL
+    msr     hcr_el2, x0
 
-    ldr x0, =SCTLR_EL1_VAL
-    msr sctlr_el1, x0
+    ldr     x0, =SCTLR_EL1_VAL
+    msr     sctlr_el1, x0
 
-    mov x0, SPSR_EL2_VAL
-    msr spsr_el2, x0
+    // Disable floating point traps
+    mov     x0, #(0x3 << 20)
+    msr     cpacr_el1, x0
+
+    mov     x0, SPSR_EL2_VAL
+    msr     spsr_el2, x0
 
     // Set exception return address
-    adr x0, el1_entry
-    msr elr_el2, x0
+    adr     x0, el1_entry
+    msr     elr_el2, x0
 
     eret
 

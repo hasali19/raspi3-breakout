@@ -3,18 +3,35 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+typedef uint32_t color_t;
+
 /**
  * Creates a color_t with the given rgb values.
  */
 #define RGB(red, green, blue)\
-    ((uint32_t)((0xFF << 24) | (red << 16) | (green << 8) | (blue << 0)))
+    ((color_t)((0xFF << 24) | (red << 16) | (green << 8) | (blue << 0)))
 
 /**
  * Initialises a 32 bit framebuffer with the given width and height.
  */
-bool framebuffer_init(uint32_t width, uint32_t height);
+bool fb_init(uint32_t width, uint32_t height);
 
 /**
  * Clears the framebuffer with the given color.
  */
-void framebuffer_clear(uint32_t color);
+void fb_clear(color_t color);
+
+/**
+ * Draws a line between two points.
+ */
+void fb_draw_line(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, color_t color);
+
+/**
+ * Draws an outlined rectangle to the screen.
+ */
+void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color_t color);
+
+/**
+ * Draws a filled in rectangle to the screen.
+ */
+void fb_fill_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color_t color);
