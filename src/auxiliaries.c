@@ -149,6 +149,16 @@ char mini_uart_read(void)
     return AUX_MU->io.value;
 }
 
+char mini_uart_poll(void)
+{
+    if (AUX_MU->lsr.data_ready)
+    {
+        return AUX_MU->io.value;
+    }
+
+    return 0;
+}
+
 void mini_uart_write(char c)
 {
     // Wait until there is space in the transmit buffer
