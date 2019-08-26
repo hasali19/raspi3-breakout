@@ -1,4 +1,5 @@
 #include "framebuffer.h"
+#include "game.h"
 #include "io.h"
 #include "props.h"
 #include "peripherals/timer.h"
@@ -16,25 +17,29 @@ void main(void)
     printf("Serial number: 0x%016x\n", get_board_serial());
     printf("ARM clock rate: %d MHz\n", get_clock_rate(0x000000003) / 1000000);
 
-    uint64_t start = timer_get_ticks();
-
-    if (fb_init(800, 600))
+    if (!fb_init(SCREEN_WIDTH, SCREEN_HEIGHT))
     {
-        for (uint32_t i = 0; i < 256; i++)
-        {
-            fb_clear(RGB(i, 0, i));
-
-            fb_draw_rect(100 + i, 100, 100, 100, RGB(255, 255, 255));
-            fb_fill_rect(100 + i, 400, 100, 100, RGB(255, 255, 255));
-        }
+        printf("Failed to initialise framebuffer\n");
+        while (1);  // hang
     }
 
-    uint64_t end = timer_get_ticks();
+    const double dt = FRAME_LENGTH / 1000000.0;
 
-    printf("256 frames rendered in %d ms\n", (end - start) / 1000);
+    game_init();
 
     while (1)
     {
-        putchar(getchar());
+        uint64_t start = timer_get_ticks();
+
+        game_update(dt);
+        game_draw();
+
+        uint64_t end = timer_get_ticks();
+        uint64_t diff = end - start;
+
+        if (diff < FRAME_LENGTH)
+        {
+            timer_wait(FRAME_LENGTH - diff);
+        }
     }
 }
