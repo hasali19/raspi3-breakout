@@ -126,8 +126,8 @@ void fb_clear(color_t color)
 
 void fb_draw_line(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, color_t color)
 {
-    float xdiff = x2 - x1;
-    float ydiff = y2 - y1;
+    float xdiff = (int)(x2 - x1);
+    float ydiff = (int)(y2 - y1);
 
     if (xdiff == 0 && ydiff == 0)
     {
@@ -152,9 +152,9 @@ void fb_draw_line(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, color_t co
 
         float slope = ydiff / xdiff;
 
-        for (uint32_t x = xmin; x <= xmax; x++)
+        for (int x = xmin; x <= xmax; x++)
         {
-            uint32_t y = y1 + ((x - x1) * slope);
+            int y = (int)y1 + ((x - (int)x1) * slope);
             FB_PUT(x, y, color);
         }
     }
@@ -175,9 +175,9 @@ void fb_draw_line(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, color_t co
 
         float slope = xdiff / ydiff;
 
-        for (uint32_t y = ymin; y <= ymax; y += 1.0f)
+        for (int y = ymin; y <= ymax; y += 1.0f)
         {
-            uint32_t x = x1 + ((y - y1) * slope);
+            int x = (int)x1 + ((y - (int)y1) * slope);
             FB_PUT(x, y, color);
         }
     }
