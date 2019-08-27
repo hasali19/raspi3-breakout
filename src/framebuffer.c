@@ -1,8 +1,8 @@
 #include "framebuffer.h"
 #include "assertions.h"
 #include "mailbox.h"
-#include "math.h"
 
+#include <math.h>
 #include <stddef.h>
 
 #define MAILBOX_REQUEST 0x00000000
