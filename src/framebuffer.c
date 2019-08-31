@@ -235,3 +235,44 @@ void fb_fill_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color
         ptr += (framebuffer.pitch - cx) + x;
     }
 }
+
+#define HEADER_PIXEL(data,pixel) {\
+pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4)); \
+pixel[1] = ((((data[1] - 33) & 0xF) << 4) | ((data[2] - 33) >> 2)); \
+pixel[2] = ((((data[2] - 33) & 0x3) << 6) | ((data[3] - 33))); \
+data += 4; \
+}
+
+void fb_draw_image(uint32_t x, uint32_t y, uint32_t width, uint32_t height, char* data)
+{
+    uint32_t* ptr = framebuffer.ptr;
+
+    if (ptr == NULL || x >= framebuffer.width || y >= framebuffer.height) return;
+
+    if (x + width > framebuffer.width)
+    {
+        width = framebuffer.width - x;
+    }
+
+    if (y + height > framebuffer.height)
+    {
+        height = framebuffer.height - y;
+    }
+
+    ptr += (framebuffer.pitch * y) + x;
+
+    char pixel[4] = { 255, 0, 0, 0 };
+
+    for (uint32_t cy = 0; cy < height; cy++)
+    {
+        uint32_t cx;
+
+        for (cx = 0; cx < width; cx++)
+        {
+            HEADER_PIXEL(data, (pixel + 1))
+            *(ptr++) = *(color_t*)pixel;
+        }
+
+        ptr += framebuffer.pitch - cx;
+    }
+}

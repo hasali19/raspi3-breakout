@@ -35,3 +35,8 @@ void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color
  * Draws a filled in rectangle to the screen.
  */
 void fb_fill_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color_t color);
+
+/**
+ * Draws an image specified by the GIMP header image format to the screen.
+ */
+void fb_draw_image(uint32_t x, uint32_t y, uint32_t width, uint32_t height, char* pixels);
