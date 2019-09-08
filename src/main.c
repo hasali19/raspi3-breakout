@@ -2,6 +2,7 @@
 #include "game.h"
 #include "io.h"
 #include "props.h"
+#include "peripherals/rand.h"
 #include "peripherals/timer.h"
 
 void set_arm_max_clock_rate(void)
@@ -13,6 +14,7 @@ void set_arm_max_clock_rate(void)
 void main(void)
 {
     set_arm_max_clock_rate();
+    rand_init();
 
     printf("Serial number: 0x%016x\n", get_board_serial());
     printf("ARM clock rate: %d MHz\n", get_clock_rate(0x000000003) / 1000000);
