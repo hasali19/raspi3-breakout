@@ -21,9 +21,12 @@
 
 static uint32_t __attribute__((aligned(16))) mailbox_buffer[35];
 
+#define COLOR_32_TO_16(src)\
+    ((color_t)((((((src) >> 16) & 0xFF) >> 3) << 11) | (((((src) >> 8) & 0x01FF) >> 2) << 5) | (((src) & 0xFF) >> 3)))
+
 static struct
 {
-    uint32_t* ptr;
+    color_t* ptr;
     uint32_t width;
     uint32_t height;
     uint32_t pitch;
@@ -55,7 +58,7 @@ bool fb_init(uint32_t width, uint32_t height)
     mailbox_buffer[17] = TAG_SET_DEPTH;
     mailbox_buffer[18] = 4;
     mailbox_buffer[19] = 0;
-    mailbox_buffer[20] = 32;
+    mailbox_buffer[20] = 16;
 
     mailbox_buffer[21] = TAG_SET_PIXEL_ORDER;
     mailbox_buffer[22] = 4;
@@ -87,7 +90,7 @@ bool fb_init(uint32_t width, uint32_t height)
         return false;
     }
 
-    framebuffer.ptr = (uint32_t*)(uintptr_t)(mailbox_buffer[5] & 0x3FFFFFFF);
+    framebuffer.ptr = (color_t*)(uintptr_t)(mailbox_buffer[5] & 0x3FFFFFFF);
 
     if (framebuffer.ptr == NULL)
     {
@@ -96,14 +99,14 @@ bool fb_init(uint32_t width, uint32_t height)
 
     framebuffer.width  = mailbox_buffer[10];
     framebuffer.height = mailbox_buffer[11];
-    framebuffer.pitch  = mailbox_buffer[28] / 4;
+    framebuffer.pitch  = mailbox_buffer[28] / sizeof(color_t);
 
     return true;
 }
 
 void fb_clear(color_t color)
 {
-    uint32_t* ptr = framebuffer.ptr;
+    color_t* ptr = framebuffer.ptr;
 
     if (ptr == NULL)
     {
@@ -185,7 +188,7 @@ void fb_draw_line(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, color_t co
 
 void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color_t color)
 {
-    uint32_t* ptr = framebuffer.ptr;
+    color_t* ptr = framebuffer.ptr;
 
     if (ptr == NULL || x >= framebuffer.width || y >= framebuffer.height) return;
 
@@ -207,7 +210,7 @@ void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color
 
 void fb_fill_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, color_t color)
 {
-    uint32_t* ptr = framebuffer.ptr;
+    color_t* ptr = framebuffer.ptr;
 
     if (ptr == NULL || x >= framebuffer.width || y >= framebuffer.height) return;
 
@@ -245,7 +248,7 @@ data += 4; \
 
 void fb_draw_image(uint32_t x, uint32_t y, uint32_t width, uint32_t height, char* data)
 {
-    uint32_t* ptr = framebuffer.ptr;
+    color_t* ptr = framebuffer.ptr;
 
     if (ptr == NULL || x >= framebuffer.width || y >= framebuffer.height) return;
 
@@ -270,7 +273,7 @@ void fb_draw_image(uint32_t x, uint32_t y, uint32_t width, uint32_t height, char
         for (cx = 0; cx < width; cx++)
         {
             HEADER_PIXEL(data, (pixel + 1))
-            *(ptr++) = *(color_t*)pixel;
+            *(ptr++) = COLOR_32_TO_16(*(uint32_t*)pixel);
         }
 
         ptr += framebuffer.pitch - cx;

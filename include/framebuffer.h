@@ -3,13 +3,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef uint32_t color_t;
+typedef uint16_t color_t;
 
 /**
  * Creates a color_t with the given rgb values.
  */
 #define RGB(red, green, blue)\
-    ((color_t)((0xFF << 24) | (red << 16) | (green << 8) | (blue << 0)))
+    ((color_t)((red << 11) | (green << 5) | (blue << 0)))
 
 /**
  * Initialises a 32 bit framebuffer with the given width and height.
