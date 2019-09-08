@@ -1,6 +1,7 @@
 #pragma once
 
-#define FRAME_LENGTH 16666U     // 60 FPS
+// #define FRAME_LENGTH 16666U     // 60 FPS
+#define FRAME_LENGTH 33333U     // 30 FPS
 
 #define SCREEN_WIDTH    800
 #define SCREEN_HEIGHT   600
